@@ -2,6 +2,10 @@ const mongoose = require('mongoose')
 const crypto = require('crypto')
 
 const schema = new mongoose.Schema({
+    avatar: {
+        type: String,
+        default: 'profile.png'
+    },
     email: {
         type: String,
         required: true
@@ -43,7 +47,7 @@ const schema = new mongoose.Schema({
         required: true
     },
     completed: {
-        type: String,
+        type: Boolean,
         default: false
     },
     token: {
