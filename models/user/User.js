@@ -19,7 +19,7 @@ const schema = new mongoose.Schema({
         default: ''
     },
     number: {
-        type: Number,
+        type: String,
         default: ''
     },
     companyName: {
@@ -27,7 +27,7 @@ const schema = new mongoose.Schema({
         default: ''
     },
     members: {
-        type: Number,
+        type: String,
         default: ''
     },
     location: {
@@ -56,6 +56,6 @@ const schema = new mongoose.Schema({
     }
 })
 
-const Signup = mongoose.model('users', schema)
+const User = mongoose.model('users', schema)
 
-module.exports = Signup
+module.exports = User

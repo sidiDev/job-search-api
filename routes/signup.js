@@ -1,27 +1,12 @@
 const express = require('express')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
-const Create = require('../crud/Create')
-const Signup = require('../modules/auth/Signup')
+const User = require('../models/user/User')
 const router = express.Router()
 
 const max_age = 6000000 * 15 * 5
 
 const secret = process.env.SECRET || "I hate you as a hacker and love my self as a hacker"
-
-const signup = (Model, data, res) => {
-
-    new Create(Model, data).save().then(response => {
-        if (response.success) {
-
-            const token = jwt.sign({ user: response.doc }, secret, {
-                expiresIn: max_age
-            })
-            
-            res.send({ token, success: true, pathname: response.doc.role })
-        }
-    })
-}
 
 router.post('/signup', (req, res) => {
 
@@ -31,17 +16,21 @@ router.post('/signup', (req, res) => {
         role: req.body.role
     }
 
-    console.log(data);
-
-    Signup.findOne({email: data.email}, (err, doc) => {
+    User.findOne({email: data.email}, (err, doc) => {
         if (doc) res.send({ success: false })
         else {
 
-            if (req.body.role == 'company') {
-                signup(Signup, data, res)
-            } else {
-                signup(Signup, data, res)
-            }
+            const newModule = new User(data)
+            newModule.save((err, user) => {
+                if (user) {
+        
+                    const token = jwt.sign({ user }, secret, {
+                        expiresIn: max_age
+                    })
+                    
+                    res.send({ token, success: true, pathname: user.role })
+                }
+            })
         }
     })
 })

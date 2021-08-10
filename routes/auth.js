@@ -1,6 +1,7 @@
 const express = require('express')
 const jwt = require('jsonwebtoken')
-const Signup = require('../modules/auth/Signup')
+const bcrypt = require('bcrypt')
+const User = require('../models/user/User')
 const router = express.Router()
 
 const secret = process.env.SECRET || "I hate you as a hacker and love my self as a hacker"
@@ -12,7 +13,22 @@ router.post('/auth', (req, res) => {
     
     try {
         const { user } = jwt.verify(token, secret)
-        Signup.findOne({_id: user._id}, (err, doc) => {
+        User.findOne({_id: user._id}, (err, doc) => {
+            const {
+                avatar,
+                email,
+                username,
+                jobTitle,
+                number,
+                companyName,
+                members,
+                location,
+                about,
+                password,
+                role,
+                completed,
+                token
+            } = doc
             if (doc) res.send({userData: doc, loggedIn: true})
         })
     }

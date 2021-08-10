@@ -1,7 +1,7 @@
 const express = require('express')
 const jwt = require('jsonwebtoken')
 const bcrypt = require('bcrypt')
-const Signup = require('../modules/auth/Signup')
+const User = require('../models/user/User')
 const router = express.Router()
 
 const max_age = 6000000 * 15 * 5
@@ -12,7 +12,7 @@ router.post('/login', (req, res) => {
 
     const { email, password } = req.body
 
-    Signup.findOne({ email }, (err, doc) => {
+    User.findOne({ email }, (err, doc) => {
         if (!doc) res.send({msg: 'This email is not exist'})
         else {
             if (!bcrypt.compareSync(password, doc.password)) res.send({msg: 'Password is not correct'})
