@@ -3,6 +3,7 @@ const ObjectId = require('mongodb').ObjectId
 const Skills = require('../models/skills/Skills')
 const router = express.Router()
 
+// Add new skill
 router.post('/skills/new', (req, res) => {
 
     const { userId, skills } = req.body
@@ -36,12 +37,26 @@ router.post('/skills/new', (req, res) => {
     })
 })
 
-router.post('/skills', (req, res) => {
-    const { _id } = req.body
+// Get skills
+router.get('/skills/:id', (req, res) => {
+    const { id } = req.params
     
-    Skills.findOne({_id: new ObjectId(_id)}, (err, doc) => {
+    Skills.findOne({_id: new ObjectId(id)}, (err, doc) => {
         if (doc) res.send({skills: doc.skills})
         else res.send({skills: []})
+    })
+})
+
+// Delete skill
+router.post('/skills/:id', (req, res) => {
+
+    const { id } = req.params
+
+    Skills.updateOne({_id: new ObjectId(id)}, {
+        $pull: { skills:  req.body.skill}
+    }, err => {
+        if (err) console.log(err);
+        else res.send({deleted: true})
     })
 })
 

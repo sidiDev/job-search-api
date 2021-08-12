@@ -1,6 +1,11 @@
 const express = require('express')
 const User = require('../models/user/User')
+const Cryptr = require('cryptr')
 const router = express.Router()
+
+const pass_secret = process.env.PASS_SECRET || "SIDI"
+
+const cryptr = new Cryptr(pass_secret)
 
 router.patch('/profile', (req, res) => {
 
@@ -11,7 +16,7 @@ router.patch('/profile', (req, res) => {
         members,
         location,
         about,
-        password,
+        password: cryptr.encrypt(password),
         completed: true
     }, err => {
         if (err) console.log(err)

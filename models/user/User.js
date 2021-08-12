@@ -4,7 +4,7 @@ const crypto = require('crypto')
 const schema = new mongoose.Schema({
     avatar: {
         type: String,
-        default: 'profile.png'
+        default: ''
     },
     email: {
         type: String,

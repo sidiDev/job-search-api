@@ -1,10 +1,14 @@
 const express = require('express')
 const jwt = require('jsonwebtoken')
-const bcrypt = require('bcrypt')
+const Cryptr = require('cryptr')
 const User = require('../models/user/User')
 const router = express.Router()
 
 const secret = process.env.SECRET || "I hate you as a hacker and love my self as a hacker"
+
+const pass_secret = process.env.PASS_SECRET || "SIDI"
+
+const cryptr = new Cryptr(pass_secret)
 
 router.post('/auth', (req, res) => {
 
@@ -14,22 +18,42 @@ router.post('/auth', (req, res) => {
     try {
         const { user } = jwt.verify(token, secret)
         User.findOne({_id: user._id}, (err, doc) => {
-            const {
-                avatar,
-                email,
-                username,
-                jobTitle,
-                number,
-                companyName,
-                members,
-                location,
-                about,
-                password,
-                role,
-                completed,
-                token
-            } = doc
-            if (doc) res.send({userData: doc, loggedIn: true})
+            if (doc) {
+                
+                const {
+                    _id,
+                    avatar,
+                    email,
+                    username,
+                    jobTitle,
+                    number,
+                    companyName,
+                    members,
+                    location,
+                    about,
+                    password,
+                    role,
+                    completed,
+                    token
+                } = doc
+
+                res.send({userData: {
+                    _id,
+                    avatar,
+                    email,
+                    username,
+                    jobTitle,
+                    number,
+                    companyName,
+                    members,
+                    location,
+                    about,
+                    password: cryptr.decrypt(password),
+                    role,
+                    completed,
+                    token
+                }, loggedIn: true})
+            }
         })
     }
     
