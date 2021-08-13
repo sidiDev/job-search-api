@@ -9,6 +9,7 @@ const companyProfile = require('./routes/companyProfile')
 const employeeProfile = require('./routes/employeeProfile')
 const skills = require('./routes/skills')
 const job = require('./routes/job')
+const jobs = require('./routes/jobs')
 
 const app = express()
 const PORT = process.env.PORT || 8000
@@ -26,6 +27,9 @@ app.use('/api/user', login)
 
 // Authentication route
 app.use('/api/user', auth)
+
+// Jobs route
+app.use('/api/jobs', jobs)
 
 // Company profile route
 app.use('/api/company', companyProfile)
