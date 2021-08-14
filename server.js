@@ -14,7 +14,11 @@ const jobs = require('./routes/jobs')
 const app = express()
 const PORT = process.env.PORT || 8000
 
-app.use(cors())
+app.use(cors({
+    origin: 'https://usa-job-search.vercel.app'
+}))
+
+// app.use(cors())
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json())
 
@@ -42,9 +46,5 @@ app.use('/api/employee', employeeProfile)
 
 // Employee skills route
 app.use('/api/employee', skills)
-
-// Job.findOne({_id: new ObjectId('6113b8d757525a1b7e1d9943')}).populate('company').exec((err, doc) => {
-//     console.log(doc);
-// })
 
 app.listen(PORT, () => console.log('Server listening on port ', PORT))
