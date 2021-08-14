@@ -3,18 +3,20 @@ const ObjectId = require('mongodb').ObjectId
 const Job = require('../models/job/Job')
 const router = express.Router()
 
+// Get jobs
 router.post('/', (req, res) => {
     
 
-    const docs = Job.countDocuments((err, count) => {}).then(docs => {
+    Job.countDocuments((err, count) => {}).then(docs => {
         Job.find({}, (err, jobs) => {
             res.send({jobs, docs})
-        }).limit(req.body.count).populate('company')
+        }).limit(req.body.count).sort({date: -1}).populate('company')
     })
     
 
 })
 
+// Get job
 router.get('/job/:id', (req, res) => {
     
     const { id } = req.params
@@ -26,24 +28,45 @@ router.get('/job/:id', (req, res) => {
 
 })
 
+// Search and filter
 router.post('/search', (req, res) => {
     const { query, count } = req.body
 
-    const queryData = [
-        // {jobTitle: {$regex: `${query.jobTitle}`, $options: 'i'}},
-        {location: query.location},
-        {jobType: query.jobType},
-        {expLevel: query.expLevel},
-        {salary: {$lte: query.salary}}
-    ]
-
     const search = query.search ? {
-        jobTitle: query.search
+        jobTitle: { $regex: query.search, $options: 'ix' }
     } : ''
 
-    Job.find({jobTitle: {$regex: search.jobTitle, $options: 'i'} }, (err, jobs) => {
-        if (jobs) res.send({ jobs })
-    }).populate('company')
+    const location = query.location ? {
+        location: query.location
+    } : ''
+
+    const jobType = query.jobType ? {
+        jobType: query.jobType
+    } : ''
+
+    const expLevel = query.expLevel ? {
+        expLevel: query.expLevel
+    } : ''
+
+    const salary = query.salary ? {
+        salary: {$lte: query.salary}
+    } : ''
+
+    Job.countDocuments((err, count) => {}).then(docs => {
+
+        Job.find({
+            ...search,
+            ...location,
+            ...jobType,
+            ...expLevel,
+            ...salary
+        }, (err, jobs) => {
+            if (jobs.length > 0) res.send({ jobs, docs, state: true })
+            else res.send({jobs: [], state: false})
+        }).limit(count).sort({date: -1}).populate('company')
+
+    })
+
 })
 
 module.exports = router

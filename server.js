@@ -14,11 +14,14 @@ const jobs = require('./routes/jobs')
 const app = express()
 const PORT = process.env.PORT || 8000
 
-app.use(cors({
-    origin: 'https://usa-job-search.vercel.app'
-}))
 
-// app.use(cors())
+if (process.env.PRODUCTION) {
+    app.use(cors({
+        origin: 'https://usa-job-search.vercel.app'
+    }))
+    
+} else app.use(cors())
+
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json())
 
