@@ -26,4 +26,24 @@ router.get('/job/:id', (req, res) => {
 
 })
 
+router.post('/search', (req, res) => {
+    const { query, count } = req.body
+
+    const queryData = [
+        // {jobTitle: {$regex: `${query.jobTitle}`, $options: 'i'}},
+        {location: query.location},
+        {jobType: query.jobType},
+        {expLevel: query.expLevel},
+        {salary: {$lte: query.salary}}
+    ]
+
+    const search = query.search ? {
+        jobTitle: query.search
+    } : ''
+
+    Job.find({jobTitle: {$regex: search.jobTitle, $options: 'i'} }, (err, jobs) => {
+        if (jobs) res.send({ jobs })
+    }).populate('company')
+})
+
 module.exports = router

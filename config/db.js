@@ -5,7 +5,7 @@ const option = {
     useUnifiedTopology: true
 }
 
-const uri = process.env.URI || 'mongodb://localhost:27017/jobSearch'
+const uri = process.env.DB_URI || 'mongodb://localhost:27017/jobSearch'
 
 mongoose.connect(uri, option, err => {
     if (err) console.log(err)
