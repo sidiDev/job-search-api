@@ -22,6 +22,9 @@ app.use(cors({
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json())
 
+app.get('/', (req, res) => {
+    res.send('Hello world')
+})
 
 // Sign up route
 app.use('/api/user', signup)
