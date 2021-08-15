@@ -1,6 +1,7 @@
 const express = require('express')
 const bodyParser = require('body-parser')
 const cors = require('cors')
+const fileupload = require('express-fileupload');
 const db = require('./config/db')
 const signup = require('./routes/signup')
 const login = require('./routes/login')
@@ -10,6 +11,7 @@ const employeeProfile = require('./routes/employeeProfile')
 const skills = require('./routes/skills')
 const job = require('./routes/job')
 const jobs = require('./routes/jobs')
+const jobRequests = require('./routes/jobRequests')
 
 const app = express()
 const PORT = process.env.PORT || 8000
@@ -22,6 +24,7 @@ if (process.env.PRODUCTION) {
     
 } else app.use(cors())
 
+app.use(fileupload({useTempFiles: true}))
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json())
 
@@ -52,5 +55,8 @@ app.use('/api/employee', employeeProfile)
 
 // Employee skills route
 app.use('/api/employee', skills)
+
+// Employee job requests
+app.use('/api/employee', jobRequests)
 
 app.listen(PORT, () => console.log('Server listening on port ', PORT))

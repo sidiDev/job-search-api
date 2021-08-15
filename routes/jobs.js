@@ -52,20 +52,21 @@ router.post('/search', (req, res) => {
         salary: {$lte: query.salary}
     } : ''
 
-    Job.countDocuments((err, count) => {}).then(docs => {
+    Job.find({
+        ...search,
+        ...location,
+        ...jobType,
+        ...expLevel,
+        ...salary
+    }, (err, jobs) => {
+        if (jobs.length > 0) {
 
-        Job.find({
-            ...search,
-            ...location,
-            ...jobType,
-            ...expLevel,
-            ...salary
-        }, (err, jobs) => {
-            if (jobs.length > 0) res.send({ jobs, docs, state: true })
-            else res.send({jobs: [], state: false})
-        }).limit(count).sort({date: -1}).populate('company')
+            const jobsLimitted = jobs.slice(0, count)
 
-    })
+            res.send({ jobs: jobsLimitted, docs: jobs.length, state: true })
+
+        } else res.send({jobs: [], state: false})
+    }).sort({date: -1}).populate('company')
 
 })
 

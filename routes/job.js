@@ -52,7 +52,7 @@ router.delete('/jobs/:id', (req, res) => {
 router.get('/job/:id', (req, res) => {
     const { id } = req.params
 
-    Job.findOne({_id: new ObjectId(id)}, (err, job) => {
+    Job.findOne({_id: id}, (err, job) => {
         if (job) res.send({ job })
         else res.send({ job: '' })
     })
@@ -70,7 +70,7 @@ router.patch('/job/:id', (req, res) => {
         jobDetails,
      } = req.body
 
-     Job.updateOne({_id: new ObjectId(id)}, {
+     Job.updateOne({_id: id}, {
         jobTitle,
         location,
         salary,

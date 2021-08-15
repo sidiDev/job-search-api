@@ -41,7 +41,7 @@ router.post('/skills/new', (req, res) => {
 router.get('/skills/:id', (req, res) => {
     const { id } = req.params
     
-    Skills.findOne({_id: new ObjectId(id)}, (err, doc) => {
+    Skills.findOne({_id: id}, (err, doc) => {
         if (doc) res.send({skills: doc.skills})
         else res.send({skills: []})
     })
