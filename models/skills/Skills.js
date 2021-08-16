@@ -1,7 +1,7 @@
 const mongoose = require('mongoose')
 
 const schema = new mongoose.Schema(({
-    _id: Object,
+    _id: mongoose.Schema.Types.ObjectId,
     skills: Array
 }))
 

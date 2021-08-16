@@ -33,7 +33,7 @@ router.post('/search', (req, res) => {
     const { query, count } = req.body
 
     const search = query.search ? {
-        jobTitle: { $regex: query.search, $options: 'ix' }
+        jobTitle: { $regex: query.search, $options: 'i' }
     } : ''
 
     const location = query.location ? {

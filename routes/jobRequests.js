@@ -8,13 +8,14 @@ const router = express.Router()
 router.get('/apply/:id', (req, res) => {
 
     Jobs.findOne({_id: req.params.id}, (err, doc) => {
-        if (!doc) res.send({exist: false})
+        if (doc)  res.send({companyId: doc.company})
+        else res.send({exist: false})
     })
 })
 
 router.post('/apply', async (req, res) => {
 
-    const { email, about, applicantId, jobId } = req.body
+    const { email, about, applicantId, jobId, companyId } = req.body
     const file = req.files.file.tempFilePath
 
     try {
@@ -27,7 +28,9 @@ router.post('/apply', async (req, res) => {
                 const newJobRequests = new JobRequests({
                     applicant: new ObjectId(applicantId),
                     job: new ObjectId(job._id),
+                    companyId,
                     resume: result.secure_url,
+                    skills: new ObjectId(applicantId),
                     email: email,
                     about: about,
                 })
