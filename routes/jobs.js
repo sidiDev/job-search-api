@@ -10,7 +10,7 @@ router.post('/', (req, res) => {
     Job.countDocuments((err, count) => {}).then(docs => {
         Job.find({}, (err, jobs) => {
             res.send({jobs, docs})
-        }).limit(req.body.count).sort({date: -1}).populate('company')
+        }).sort({date: -1}).limit(req.body.count).populate('company')
     })
     
 
