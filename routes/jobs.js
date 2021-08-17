@@ -8,12 +8,11 @@ router.post('/', (req, res) => {
     
 
     Job.countDocuments((err, count) => {}).then(docs => {
-        Job.find({}, (err, jobs) => {
+        Job.find({}).sort({date: -1}).limit(req.body.count).populate('company').exec((err, jobs) => {
             res.send({jobs, docs})
-        }).sort({date: -1}).limit(req.body.count).populate('company')
+        })
     })
     
-
 })
 
 // Get job
@@ -58,7 +57,7 @@ router.post('/search', (req, res) => {
         ...jobType,
         ...expLevel,
         ...salary
-    }, (err, jobs) => {
+    }).sort({date: -1}).populate('company').exec((err, jobs) => {
         if (jobs.length > 0) {
 
             const jobsLimitted = jobs.slice(0, count)
@@ -66,7 +65,7 @@ router.post('/search', (req, res) => {
             res.send({ jobs: jobsLimitted, docs: jobs.length, state: true })
 
         } else res.send({jobs: [], state: false})
-    }).sort({date: -1}).populate('company')
+    })
 
 })
 
