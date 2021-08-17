@@ -9,7 +9,7 @@ router.get('/apply/:id', (req, res) => {
 
     Jobs.findOne({_id: req.params.id}, (err, doc) => {
         if (doc)  res.send({companyId: doc.company})
-        else res.send({exist: false})
+        else res.send({companyId: ''})
     })
 })
 
