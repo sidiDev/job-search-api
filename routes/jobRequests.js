@@ -8,8 +8,8 @@ const router = express.Router()
 router.get('/apply/:id', (req, res) => {
 
     Jobs.findOne({_id: req.params.id}, (err, doc) => {
-        if (doc)  res.send({companyId: doc.company})
-        else res.send({companyId: ''})
+        if (doc && doc.company)  res.send({companyId: doc.company, status: true})
+        else res.send({status: false})
     })
 })
 
