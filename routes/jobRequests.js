@@ -16,32 +16,25 @@ router.post('/apply', async (req, res) => {
 
     const { email, about, applicantId, jobId, companyId } = req.body
 
-    try {
-        
-        Jobs.findOne({_id: jobId}, async (err, job) => {
-            if (job) {
-        
-                const newJobRequests = new JobRequests({
-                    applicant: new ObjectId(applicantId),
-                    job: new ObjectId(job._id),
-                    companyId,
-                    skills: new ObjectId(applicantId),
-                    email: email,
-                    about: about,
-                })
+    Jobs.findOne({_id: jobId}, async (err, job) => {
+        if (job) {
+    
+            const newJobRequests = new JobRequests({
+                applicant: new ObjectId(applicantId),
+                job: new ObjectId(job._id),
+                companyId,
+                skills: new ObjectId(applicantId),
+                email: email,
+                about: about,
+            })
 
-                newJobRequests.save(err => {
-                    if (err) console.log(err)
-                    else res.send({submited: true})
-                })
+            newJobRequests.save(err => {
+                if (err) console.log(err)
+                else res.send({submited: true})
+            })
 
-            }
-        })
-
-
-    } catch (err) {
-        console.log(err)
-    }
+        }
+    })
 })
 
 router.get('/requests/:id', (req, res) => {
