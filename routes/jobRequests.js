@@ -29,7 +29,7 @@ router.post('/apply', async (req, res) => {
                     applicant: new ObjectId(applicantId),
                     job: new ObjectId(job._id),
                     companyId,
-                    resume: result.url,
+                    resume: result.public_id,
                     skills: new ObjectId(applicantId),
                     email: email,
                     about: about,
