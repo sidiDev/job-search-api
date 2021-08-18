@@ -2,7 +2,6 @@ const express = require('express')
 const ObjectId = require('mongodb').ObjectId
 const JobRequests = require('../models/jobRequests/JobRequests')
 const Jobs = require('../models/job/Job')
-const uploader = require('../uploader/uploader')
 const router = express.Router()
 
 router.get('/apply/:id', (req, res) => {
@@ -16,20 +15,16 @@ router.get('/apply/:id', (req, res) => {
 router.post('/apply', async (req, res) => {
 
     const { email, about, applicantId, jobId, companyId } = req.body
-    const file = req.files.file.tempFilePath
 
     try {
         
         Jobs.findOne({_id: jobId}, async (err, job) => {
             if (job) {
-
-                const result = await uploader(file)
         
                 const newJobRequests = new JobRequests({
                     applicant: new ObjectId(applicantId),
                     job: new ObjectId(job._id),
                     companyId,
-                    resume: result.secure_url,
                     skills: new ObjectId(applicantId),
                     email: email,
                     about: about,

@@ -14,7 +14,6 @@ const shema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId
     },
     companyId: String,
-    resume: String,
     email: String,
     about: String,
 })
