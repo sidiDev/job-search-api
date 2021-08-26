@@ -15,6 +15,24 @@ router.post('/', (req, res) => {
     
 })
 
+// Recommended jobs
+router.get('/recommended', (req, res) => {
+    
+    const { jobTitle, keyword } = req.query
+
+    const jobtile = jobTitle ? {jobTitle: { $regex: jobTitle, $options: 'i' }} : {jobTitle: ''}
+    const keyWord = keyword ? {jobTitle: { $regex: keyword, $options: 'i' }} : {jobTitle: ''}
+
+    const random = Math.floor(Math.random() * 10)
+
+    Job.find({$or: [
+        jobtile,
+        keyWord
+    ]}).skip(random).limit(5).populate('company').exec((err, jobs) => {
+        res.send({jobs})
+    })
+})
+
 // Get job
 router.get('/job/:id', (req, res) => {
     
