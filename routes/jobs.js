@@ -23,8 +23,6 @@ router.get('/recommended', (req, res) => {
     const jobtile = jobTitle ? {jobTitle: { $regex: jobTitle, $options: 'i' }} : {jobTitle: ''}
     const keyWord = keyword ? {jobTitle: { $regex: keyword, $options: 'i' }} : {jobTitle: ''}
 
-    // const random = Math.floor(Math.random() * 10) .skip(random)
-
     Job.find({$or: [
         jobtile,
         keyWord
