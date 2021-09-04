@@ -3,6 +3,18 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "builds": [
+    {
+      "src": "./server.js",
+      "use": "@vercel/node"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "/"
+    }
+  ],
   "scripts": {
     "start": "node server.js",
     "server": "nodemon server.js"
